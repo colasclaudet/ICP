@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/billboard.fsh</file>
+        <file>shaders/billboard.vsh</file>
+        <file>shaders/billboard_m.fsh</file>
+        <file>shaders/billboard_m.vsh</file>
+        <file>shaders/simple.fsh</file>
+        <file>shaders/simple.vsh</file>
+    </qresource>
+</RCC>
