@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     icp.cpp \
+    kdtree.cpp \
     main.cpp \
     mainwindow.cpp \
     glarea.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
 HEADERS += \
     happly.h \
     icp.h \
+    kdtree.h \
     mainwindow.h \
     glarea.h \
     pointcloud.h \

@@ -1,7 +1,7 @@
 #ifndef ICP_H
 #define ICP_H
 #include "pointcloud.h"
-
+#include "kdtree.h"
 class ICP
 {
 public:
