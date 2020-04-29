@@ -1,0 +1,14 @@
+#ifndef SVD_H
+#define SVD_H
+
+
+#pragma once
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+static double PYTHAG(double a, double b);
+int dsvd(float **a, int m, int n, float *w, float **v);
+
+#endif // SVD_H

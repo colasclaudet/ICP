@@ -9,9 +9,138 @@ KDTree::KDTree(std::vector<Vertex> *points)
 {
     tempArray = new Vertex[points->size()];
     build(points,0,points->size(),0);
-    delete tempArray;
+    //delete tempArray;
 }
 
+float KDTree::nodeX()
+{
+    return __node->getX();
+}
+float KDTree::nodeY()
+{
+    return __node->getY();
+}
+float KDTree::nodeZ()
+{
+    return __node->getZ();
+}
+float KDTree::split()
+{
+    float value = 0.0;
+    if(__sortOn == 2)
+    {
+        value = __node->getZ();
+    }
+    else if(__sortOn == 1)
+    {
+        value = __node->getY();
+    }
+    else
+    {
+        value = __node->getX();
+    }
+    return value;
+}
+KDTree* KDTree::getChild(Vertex * searchPoint)
+{
+    float value = 0.0;
+    if(__sortOn == 2)
+    {
+        value = searchPoint->getZ();
+    }
+    else if(__sortOn == 1)
+    {
+        value = searchPoint->getY();
+    }
+    else
+    {
+        value = searchPoint->getX();
+    }
+    if (value >= split())
+    {
+        return __children[1];
+    }
+    else
+    {
+        return __children[0];
+    }
+}
+bool KDTree::isLeaf()
+{
+    if (__children[0] == nullptr && __children[1] == nullptr)
+        return true;
+
+    return false;
+}
+
+void KDTree::search(Vertex * p, Vertex* result)
+{
+    // get closets node
+    KDTree* tree = this;
+    while (!tree->isLeaf())
+    {
+        tree = tree->getChild(p);
+    }
+    result->x = tree->nodeX();
+    result->y = tree->nodeY();
+    result->z = tree->nodeZ();
+
+    float radius = sqrt(pow(p->x - result->x, 2.0) + pow(p->y - result->y, 2.0) + pow(p->z - result->z, 2.0));
+
+    radiusSearch(p, &radius, result);
+}
+
+void KDTree::radiusSearch(Vertex* p, float* radius, Vertex* result)
+{
+    if (isLeaf())
+    {
+        float d = sqrt(pow(__node->x - p->x, 2.0) + pow(__node->y - p->y, 2.0) + pow(__node->z - p->z, 2.0));
+        if (d < *radius)
+        {
+            *radius = d;
+            result->x = __node->x;
+            result->y = __node->y;
+            result->z = __node->z;
+            return;
+        }
+    }
+    else
+    {
+        float value_node = 0.0;
+        float value_p = 0.0;
+        if(__sortOn == 2)
+        {
+            value_node = __node->getZ();
+            value_p = p->getZ();
+        }
+        else if(__sortOn == 1)
+        {
+            value_node = __node->getY();
+            value_p = p->getY();
+        }
+        else
+        {
+            value_node = __node->getX();
+            value_p = p->getX();
+        }
+        if (abs(value_node - value_p) < *radius)
+        {
+            __children[0]->radiusSearch(p, radius, result);
+            __children[1]->radiusSearch(p, radius, result);
+        }
+        else
+        {
+            if (value_p >= value_node)
+            {
+                __children[1]->radiusSearch(p, radius, result);
+            }
+            else
+            {
+                __children[0]->radiusSearch(p, radius, result);
+            }
+        }
+    }
+}
 void KDTree::build(std::vector<Vertex> *points, int start, int end, int sortOn)
 {
     __children[0] = nullptr;

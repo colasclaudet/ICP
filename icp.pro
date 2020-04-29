@@ -22,16 +22,19 @@ SOURCES += \
     mainwindow.cpp \
     glarea.cpp \
     pointcloud.cpp \
+    svd.cpp \
     vertex.cpp \
     vertices.cpp
 
 HEADERS += \
+    defs_and_types.h \
     happly.h \
     icp.h \
     kdtree.h \
     mainwindow.h \
     glarea.h \
     pointcloud.h \
+    svd.h \
     vertex.h \
     vertices.h
 

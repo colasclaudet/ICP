@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include "pointcloud.h"
+#include "icp.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE

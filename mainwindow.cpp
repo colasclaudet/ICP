@@ -68,6 +68,10 @@ void MainWindow::loadICP()
         {
             dist = this->pointcloud2->getDistmax();
         }
+        ICP icp;
+        std::vector<Vertex> v1 = this->pointcloud1->getPoints().toStdVector();
+        std::vector<Vertex> v2 = this->pointcloud2->getPoints().toStdVector();
+        icp.icp(&v1,&v2);
         v = this->pointcloud1->getPoints() + this->pointcloud2->getPoints();
         ui->glarea->set_particle(v,dist);
     }
