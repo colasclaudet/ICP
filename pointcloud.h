@@ -20,6 +20,7 @@ public:
 
     QVector4D getColor() const;
 
+    bool save(std::string filename);
 private:
     QVector<Vertex> points;
     float distmin = 1000000000000000000.0;

@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(ui->actioncharger, SIGNAL(triggered()), this, SLOT(load()));
     connect(ui->actionICP, SIGNAL(triggered()), this, SLOT(loadICP()));
+    connect(ui->actionsauvegarder, SIGNAL(triggered()), this, SLOT(save()));
+    ui->actionsauvegarder->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -55,7 +57,8 @@ void MainWindow::loadICP()
     }
     else
     {
-
+        buffer.clear();
+        ui->statusbar->showMessage("load "+ file1 + file2+"...");
         this->pointcloud1 = new Pointcloud(file1);
         this->pointcloud2 = new Pointcloud(file2,QVector4D(0.0,0.0,1.0,0.5));
         QVector<Vertex> v;
@@ -75,7 +78,19 @@ void MainWindow::loadICP()
         QVector <Vertex> vp1 = QVector<Vertex>::fromStdVector(v1);
         QVector <Vertex> vp2 = QVector<Vertex>::fromStdVector(v2);
         //v = this->pointcloud1->getPoints() + this->pointcloud2->getPoints();
-        v = vp1+vp2;
-        ui->glarea->set_particle(v,dist);
+        this->buffer = vp1+vp2;
+        ui->glarea->set_particle(buffer,dist);
+        ui->actionsauvegarder->setVisible(true);
     }
+}
+
+void MainWindow::save()
+{
+    ui->glarea->clear_particle();
+    QString fileName = QFileDialog::getSaveFileName(this,
+            tr("Save PLY file"), "",
+            tr("PLY file (*.ply);;All Files (*)"));
+    Pointcloud p;
+    p.setPoints(this->buffer);
+    p.save(fileName.toStdString());
 }

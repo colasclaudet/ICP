@@ -113,3 +113,34 @@ QVector4D Pointcloud::getColor() const
 {
     return color;
 }
+
+bool Pointcloud::save(std::string filename)
+{
+    // Suppose these hold your data
+    std::vector<float> x_coord;
+    std::vector<float> y_coord;
+    std::vector<float> z_coord;
+
+    for(int i = 0; i<this->points.size(); i++)
+    {
+        x_coord.push_back(this->points.at(i).getX());
+        y_coord.push_back(this->points.at(i).getY());
+        z_coord.push_back(this->points.at(i).getZ());
+    }
+    std::vector<std::vector<double>> elementB_listProp;
+
+    // Create an empty object
+    happly::PLYData plyOut;
+
+    // Add elements
+    plyOut.addElement("vertex", this->points.size());
+
+
+    // Add properties to those elements
+    plyOut.getElement("vertex").addProperty<float>("x", x_coord);
+    plyOut.getElement("vertex").addProperty<float>("y", y_coord);
+    plyOut.getElement("vertex").addProperty<float>("z", z_coord);
+
+    // Write the object to file
+    plyOut.write(filename+".ply", happly::DataFormat::Binary);
+}

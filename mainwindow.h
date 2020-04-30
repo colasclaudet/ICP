@@ -21,10 +21,11 @@ public:
 public slots:
     void load();
     void loadICP();
+    void save();
 
 private:
     Ui::MainWindow *ui;
-
+    QVector<Vertex> buffer;
     Pointcloud * pointcloud1;
     Pointcloud * pointcloud2;
 
