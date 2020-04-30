@@ -72,7 +72,10 @@ void MainWindow::loadICP()
         std::vector<Vertex> v1 = this->pointcloud1->getPoints().toStdVector();
         std::vector<Vertex> v2 = this->pointcloud2->getPoints().toStdVector();
         icp.icp(&v1,&v2);
-        v = this->pointcloud1->getPoints() + this->pointcloud2->getPoints();
+        QVector <Vertex> vp1 = QVector<Vertex>::fromStdVector(v1);
+        QVector <Vertex> vp2 = QVector<Vertex>::fromStdVector(v2);
+        //v = this->pointcloud1->getPoints() + this->pointcloud2->getPoints();
+        v = vp1+vp2;
         ui->glarea->set_particle(v,dist);
     }
 }

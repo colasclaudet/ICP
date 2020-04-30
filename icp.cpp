@@ -22,8 +22,10 @@ Pointcloud *ICP::icp(std::vector<Vertex> * dynamicPointCloud, std::vector<Vertex
     }
     KDTree * tree = new KDTree(staticPointCloud);
     size_t numDynamicPoints = dynamicPointCloud->size();
-    computeCloudMean(staticPointCloud, &staticMid);
-    computeCloudMean(dynamicPointCloud,&dynamicMid);
+    //computeCloudMean(staticPointCloud, &staticMid);
+    //computeCloudMean(dynamicPointCloud,&dynamicMid);
+    staticMid = computeCloudMean(staticPointCloud);
+    dynamicMid = computeCloudMean(dynamicPointCloud);
 
     clearTranslation(translation);
     clearRotation(rotationMatrix);
@@ -65,8 +67,8 @@ Pointcloud *ICP::icp(std::vector<Vertex> * dynamicPointCloud, std::vector<Vertex
         clearMatrix(U);
         clearMatrix(V);
         clearMatrix(w);
-        computeCloudMean(dynamicPointCloud, &dynamicMid);
-
+        //computeCloudMean(dynamicPointCloud, &dynamicMid);
+        dynamicMid = computeCloudMean(dynamicPointCloud);
         for (int i = 0; i < numRandomSamples; i++)
         {
             int randSample = std::rand() % dynamicPointCloud->size();

@@ -13,20 +13,22 @@ public:
 
     void clearRotation(float* rotation);
 
-    inline void computeCloudMean(std::vector<Vertex> * cloud, Vertex * mean)
+    inline Vertex computeCloudMean(std::vector<Vertex> * cloud)
     {
-        mean->x = 0.0;
+        Vertex mean(0.04,0.0,0.0,0.0);
+        /*mean->x = 0.0;
         mean->y = 0.0;
-        mean->z = 0.0;
+        mean->z = 0.0;*/
         for (unsigned int i = 0; i < cloud->size(); i++)
         {
-            mean->x += cloud[i].at(i).x;
-            mean->y += cloud[i].at(i).y;
-            mean->z += cloud[i].at(i).z;
+                mean.x = mean.x + cloud->at(i).x;
+                mean.y = mean.y + cloud->at(i).y;
+                mean.z = mean.z + cloud->at(i).z;
         }
-        mean->x = mean->x / (float)cloud->size();
-        mean->y = mean->y / (float)cloud->size();
-        mean->z = mean->z / (float)cloud->size();
+        mean.x = mean.x / (float)cloud->size();
+        mean.y = mean.y / (float)cloud->size();
+        mean.z = mean.z / (float)cloud->size();
+        return mean;
     }
     inline void clearMatrix(float* mat)
     {
