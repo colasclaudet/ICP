@@ -5,33 +5,34 @@ ICP::ICP()
 
 }
 
-Pointcloud *ICP::icp(std::vector<Vertex> * dynamicPointCloud, std::vector<Vertex> * staticPointCloud)
+Pointcloud *ICP::icp(std::vector<Vertex *> &dynamicPointCloud, std::vector<Vertex *> &staticPointCloud)
 {
     float rotationMatrix[9];
     float translation[3];
 
-    std::vector<Vertex> cpy;
+    std::vector<Vertex *> cpy;
     Vertex dynamicMid(0.04,0.0,0.0,0.0);
     Vertex staticMid(0.04,0.0,0.0,0.0);
-    for(unsigned int i = 0; i< staticPointCloud->size();i++)
+    for(unsigned int i = 0; i< staticPointCloud.size();i++)
     {
-        Vertex v(0.04,staticPointCloud->at(i).getX(),
-                 staticPointCloud->at(i).getY(),
-                 staticPointCloud->at(i).getZ());
+        Vertex * v = new Vertex(0.04,staticPointCloud.at(i)->getX(),
+                 staticPointCloud.at(i)->getY(),
+                 staticPointCloud.at(i)->getZ());
         cpy.push_back(v);
     }
     KDTree * tree = new KDTree(staticPointCloud);
-    size_t numDynamicPoints = dynamicPointCloud->size();
+    size_t numDynamicPoints = dynamicPointCloud.size();
+
     //computeCloudMean(staticPointCloud, &staticMid);
     //computeCloudMean(dynamicPointCloud,&dynamicMid);
-    staticMid = computeCloudMean(staticPointCloud);
-    dynamicMid = computeCloudMean(dynamicPointCloud);
+    computeCloudMean(staticPointCloud, &staticMid);
+    computeCloudMean(dynamicPointCloud, &dynamicMid);
 
     clearTranslation(translation);
     clearRotation(rotationMatrix);
 
-    const int maxIterations = 400;
-    const int numRandomSamples = 400;
+    const int maxIterations = 400; //400
+    const int numRandomSamples = 400; //400
     const float eps = 1e-8;
 
     Vertex p(0.04,0.0,0.0,0.0);
@@ -68,12 +69,12 @@ Pointcloud *ICP::icp(std::vector<Vertex> * dynamicPointCloud, std::vector<Vertex
         clearMatrix(V);
         clearMatrix(w);
         //computeCloudMean(dynamicPointCloud, &dynamicMid);
-        dynamicMid = computeCloudMean(dynamicPointCloud);
+        computeCloudMean(dynamicPointCloud, &dynamicMid);
         for (int i = 0; i < numRandomSamples; i++)
         {
-            int randSample = std::rand() % dynamicPointCloud->size();
+            int randSample = std::rand() % dynamicPointCloud.size();
             // sample the dynamic point cloud
-            p = dynamicPointCloud->at(randSample);
+            p = *dynamicPointCloud.at(randSample);
 
             // get the closest point in the static point cloud
             tree->search(&p, &x);
@@ -106,10 +107,11 @@ Pointcloud *ICP::icp(std::vector<Vertex> * dynamicPointCloud, std::vector<Vertex
         translation[2] = staticMid.z - t.z;
 
         //update the point cloud
-        for (unsigned int i = 0; i < dynamicPointCloud->size(); i++)
+        for (unsigned int i = 0; i < dynamicPointCloud.size(); i++)
         {
-            rotate(&dynamicPointCloud->at(i), rotationMatrix, &p);
-            translate(&p, translation, &dynamicPointCloud->at(i));
+            rotate(dynamicPointCloud.at(i), rotationMatrix, &p);
+            translate(&p, translation, dynamicPointCloud.at(i));
+            //MAYBE HERE
         }
     }
 
@@ -125,7 +127,7 @@ Pointcloud *ICP::icp(std::vector<Vertex> * dynamicPointCloud, std::vector<Vertex
     delete[] vSvd[1];
     delete[] vSvd[2];
     delete[] vSvd;
-    //TODO
+
 }
 
 void ICP::clearTranslation(float* translation)

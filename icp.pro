@@ -17,12 +17,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     icp.cpp \
+    icp2.cpp \
     kdtree.cpp \
     main.cpp \
     mainwindow.cpp \
     glarea.cpp \
     pointcloud.cpp \
+    statistics.cpp \
     svd.cpp \
+    transformation.cpp \
     vertex.cpp \
     vertices.cpp
 
@@ -30,11 +33,14 @@ HEADERS += \
     defs_and_types.h \
     happly.h \
     icp.h \
+    icp2.h \
     kdtree.h \
     mainwindow.h \
     glarea.h \
     pointcloud.h \
+    statistics.h \
     svd.h \
+    transformation.h \
     vertex.h \
     vertices.h
 

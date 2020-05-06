@@ -57,6 +57,7 @@
     <addaction name="actionICP"/>
     <addaction name="separator"/>
     <addaction name="actionsauvegarder"/>
+    <addaction name="actionrepeter_icp"/>
    </widget>
    <addaction name="menuMenu"/>
   </widget>
@@ -104,6 +105,11 @@
   <action name="actionsauvegarder">
    <property name="text">
     <string>sauvegarder</string>
+   </property>
+  </action>
+  <action name="actionrepeter_icp">
+   <property name="text">
+    <string>repeter_icp</string>
    </property>
   </action>
  </widget>

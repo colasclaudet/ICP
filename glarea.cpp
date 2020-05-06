@@ -105,11 +105,25 @@ void GLArea::draw_bounding_box(GLfloat xmax, GLfloat ymax, GLfloat zmax, GLfloat
 
 void GLArea::set_particle(QVector<Vertex> vectv, float fact)
 {
-    this->list_vert.clear();
+    //this->list_vert.clear();
     for (unsigned int i = 0; i<vectv.size();i++)
     {
         Vertex v(vectv.at(i).getSize(),vectv.at(i).getX()*100.0/fact,vectv.at(i).getY()*100.0/fact,vectv.at(i).getZ()*100.0/fact);
         v.setColor(vectv.at(i).getColor());
+        list_vert.push_back(v);
+    }
+
+    //list_vert = vectv.toList();
+    this->vert = new Vertices(list_vert.size(),list_vert);
+}
+
+void GLArea::set_particle(std::vector<Vertex *> vectv, float fact)
+{
+    //this->list_vert.clear();
+    for (unsigned int i = 0; i<vectv.size();i++)
+    {
+        Vertex v(vectv.at(i)->getSize(),vectv.at(i)->getX()*100.0/fact,vectv.at(i)->getY()*100.0/fact,vectv.at(i)->getZ()*100.0/fact);
+        v.setColor(vectv.at(i)->getColor());
         list_vert.push_back(v);
     }
 

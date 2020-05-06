@@ -1,15 +1,22 @@
 #include "kdtree.h"
 
-KDTree::KDTree(std::vector<Vertex> * points, int start, int end, int sortOn)
+KDTree::KDTree(std::vector<Vertex *> &points, int start, int end, int sortOn)
 {
     build(points, start, end, sortOn);
 }
 
-KDTree::KDTree(std::vector<Vertex> *points)
+KDTree::KDTree(std::vector<Vertex *> &points)
 {
-    tempArray = new Vertex[points->size()];
-    build(points,0,points->size(),0);
+    tempArray = new Vertex*[points.size()];
+    build(points,0,points.size(),0);
     //delete tempArray;
+}
+
+KDTree::~KDTree()
+{
+    delete __children[0];
+    delete __children[1];
+    delete __node;
 }
 
 float KDTree::nodeX()
@@ -141,7 +148,7 @@ void KDTree::radiusSearch(Vertex* p, float* radius, Vertex* result)
         }
     }
 }
-void KDTree::build(std::vector<Vertex> *points, int start, int end, int sortOn)
+void KDTree::build(std::vector<Vertex *> &points, int start, int end, int sortOn)
 {
     __children[0] = nullptr;
     __children[1] = nullptr;
@@ -154,9 +161,9 @@ void KDTree::build(std::vector<Vertex> *points, int start, int end, int sortOn)
 
     if(end - start ==1)
     {
-        __node = new Vertex(0.04,points->at(start).getX(),
-                            points->at(start).getY(),
-                            points->at(start).getZ());
+        __node = new Vertex(0.04,points.at(start)->getX(),
+                            points.at(start)->getY(),
+                            points.at(start)->getZ());
         return;
     }
     //mergesort
@@ -165,7 +172,7 @@ void KDTree::build(std::vector<Vertex> *points, int start, int end, int sortOn)
     int numPoints = end - start;
     int mid = static_cast<int>(floor((numPoints)*0.5)) + start;
 
-    __node = new Vertex(0.04,points->at(mid).getX(),points->at(mid).getY(),points->at(mid).getZ());
+    __node = new Vertex(0.04,points.at(mid)->getX(),points.at(mid)->getY(),points.at(mid)->getZ());
 
     int numPointsHigh =(end - mid);
     int numPointsLow = (mid - start);
@@ -179,7 +186,7 @@ void KDTree::build(std::vector<Vertex> *points, int start, int end, int sortOn)
     }
 }
 
-void KDTree::mergeSort(std::vector<Vertex> *points, int start, int end)
+void KDTree::mergeSort(std::vector<Vertex *> &points, int start, int end)
 {
     int mid;
     if(start>end)
@@ -192,7 +199,7 @@ void KDTree::mergeSort(std::vector<Vertex> *points, int start, int end)
     }
 }
 
-void KDTree::merge(std::vector<Vertex> *points, int left, int mid, int right)
+void KDTree::merge(std::vector<Vertex *> &points, int left, int mid, int right)
 {
     int i, leftEnd, numElements, tempPos;
 
@@ -206,29 +213,29 @@ void KDTree::merge(std::vector<Vertex> *points, int left, int mid, int right)
         float pmid = 0.0;
         if(__sortOn == 0)
         {
-            pleft = points->at(left).getX();
-            pmid = points->at(mid).getX();
+            pleft = points.at(left)->getX();
+            pmid = points.at(mid)->getX();
         }
         else if(__sortOn == 1)
         {
-            pleft = points->at(left).getY();
-            pmid = points->at(mid).getY();
+            pleft = points.at(left)->getY();
+            pmid = points.at(mid)->getY();
         }
         else if(__sortOn == 2)
         {
-            pleft = points->at(left).getZ();
-            pmid = points->at(mid).getZ();
+            pleft = points.at(left)->getZ();
+            pmid = points.at(mid)->getZ();
         }
 
         if (pleft <= pmid)
         {
-            tempArray[tempPos] = points->at(left);
+            tempArray[tempPos] = points.at(left);
             tempPos++;
             left++;
         }
         else
         {
-            tempArray[tempPos] = points->at(mid);
+            tempArray[tempPos] = points.at(mid);
             tempPos++;
             mid++;
         }
@@ -236,20 +243,20 @@ void KDTree::merge(std::vector<Vertex> *points, int left, int mid, int right)
 
     while (left < leftEnd)
     {
-        tempArray[tempPos] = points->at(left);
+        tempArray[tempPos] = points.at(left);
         left++;
         tempPos++;
     }
     while (mid <= right)
     {
-        tempArray[tempPos] = points->at(mid);
+        tempArray[tempPos] = points.at(mid);
         mid++;
         tempPos++;
     }
 
     for (int i = tempPos - 1; i >= 0; i--)
     {
-        points->at(right) = tempArray[i];
+        points.at(right) = tempArray[i];
         right--;
     }
 }

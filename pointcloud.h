@@ -7,6 +7,7 @@ class Pointcloud
 public:
     Pointcloud();
     Pointcloud(QString filename);
+    Pointcloud(QString filename, int decimation);
     Pointcloud(QString filename, QVector4D color);
     Vertex at(int i);
     void push_back(Vertex v);
@@ -21,11 +22,15 @@ public:
     QVector4D getColor() const;
 
     bool save(std::string filename);
+    int getDecimation() const;
+
 private:
     QVector<Vertex> points;
     float distmin = 1000000000000000000.0;
     float distmax = -1000000000000000000.0;
     QVector4D color = QVector4D(0.9f,1.0f,0.2f,0.5f);
+    int decimation = 0.0;
+    int maxPts = 25000;
 };
 
 #endif // POINTCLOUD_H

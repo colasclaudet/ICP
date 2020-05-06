@@ -22,6 +22,7 @@ public slots:
     void load();
     void loadICP();
     void save();
+    void repeatIcp();
 
 private:
     Ui::MainWindow *ui;
@@ -29,5 +30,9 @@ private:
     Pointcloud * pointcloud1;
     Pointcloud * pointcloud2;
 
+    bool isIcp = false;
+    std::vector<Vertex *> v_icp1;
+    std::vector<Vertex *> v_icp2;
+    int dist = 0;
 };
 #endif // MAINWINDOW_H
